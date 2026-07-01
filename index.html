@@ -641,7 +641,7 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
     <span class="ab-icon">🚨</span> Alert
   </button>
 
-  <button class="ab-btn ab-transfer" onclick="transferData()" id="tBtn">
+  <button class="ab-btn ab-transfer" onclick="if(confirm('Submit all meeting points?\n\nThis will move all rows to the submitted sheet and cannot be undone.'))transferData()" id="tBtn">
     <span class="ab-icon" id="tIcon">📤</span> Submit
   </button>
 
