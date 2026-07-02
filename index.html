@@ -45,7 +45,7 @@ body{
 .cards-row{
   display:grid;
   grid-template-columns:auto 1fr auto;
-  align-items:center;
+  align-items:stretch;
   padding:10px 16px 8px;gap:8px;
   position:sticky;top:46px;z-index:99;
   background:linear-gradient(140deg,#EEF2FF 0%,#F5F3FF 40%,#FFF7ED 100%);
@@ -68,6 +68,7 @@ body{
 .centre-title{
   text-align:center;
   padding:0 12px;
+  align-self:center;
 }
 .centre-title h1{
   font-family:'Montserrat',sans-serif;
@@ -158,7 +159,7 @@ body{
   margin:0 16px 10px;background:#fff;border-radius:16px;
   box-shadow:0 2px 16px rgba(79,70,229,.1);overflow:clip;
 }
-table{width:100%;border-collapse:collapse;font-size:17px;table-layout:fixed;}
+table{width:100%;border-collapse:collapse;font-size:19px;font-weight:600;table-layout:fixed;}
 col.c-chk{width:34px;}col.c-sl{width:36px;}col.c-cp{width:118px;}
 col.c-dp{width:26%;}col.c-att{width:64px;}col.c-rp{width:118px;}
 col.c-st{width:106px;}col.c-ap{width:22%;}
@@ -181,11 +182,11 @@ tbody tr.hl .sl-cell{color:var(--emerald)!important;}
 tbody tr.hl td input[type="text"],
 tbody tr.hl td textarea{color:var(--emerald)!important;font-weight:600;}
 tbody tr.hl td select{color:var(--emerald)!important;}
-.sl-cell{text-align:center;font-weight:700;color:var(--indigo);font-size:16px;}
+.sl-cell{text-align:center;font-weight:800;color:var(--indigo);font-size:19px;}
 .chk-cell,.att-cell{text-align:center;}
 input[type="checkbox"]{width:15px;height:15px;cursor:pointer;accent-color:var(--indigo);}
 td input[type="text"]{
-  width:100%;border:none;background:transparent;font-size:17px;
+  width:100%;border:none;background:transparent;font-size:19px;font-weight:600;
   padding:2px 4px;outline:none;color:#1e293b;
 }
 td input[type="text"]:not([readonly]):focus{
@@ -194,7 +195,7 @@ td input[type="text"]:not([readonly]):focus{
 td input[type="text"]::placeholder{color:#CBD5E1;}
 td input[type="text"][readonly]{cursor:default;}
 td textarea{
-  width:100%;border:none;background:transparent;font-size:17px;
+  width:100%;border:none;background:transparent;font-size:19px;font-weight:600;
   padding:2px 4px;outline:none;color:#1e293b;
   resize:none;overflow:hidden;min-height:24px;line-height:1.45;font-family:inherit;
 }
@@ -205,7 +206,7 @@ td textarea::placeholder{color:#CBD5E1;}
 td textarea[readonly]{cursor:default;}
 select.ssel{
   width:100%;border:1px solid #E2E8F0;background:#fff;padding:4px;
-  font-size:15px;cursor:pointer;border-radius:6px;color:#444;
+  font-size:17px;font-weight:600;cursor:pointer;border-radius:6px;color:#444;
 }
 select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 
@@ -646,15 +647,12 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
     <span class="ab-icon">📋</span> Add Meeting Point
   </button>
 
-  <button class="ab-btn ab-refresh" onclick="confirmRefresh()" id="refreshBtn">
-    <span class="ab-icon">🔄</span> Refresh
-  </button>
 
   <button class="ab-btn ab-alert" onclick="openAlert()">
     <span class="ab-icon">🚨</span> Alert
   </button>
 
-  <button class="ab-btn ab-transfer" onclick="if(confirm('Submit all meeting points?\n\nThis will move all rows to the submitted sheet and cannot be undone.'))transferData()" id="tBtn">
+  <button class="ab-btn ab-transfer" onclick="confirmSubmit()" id="tBtn">
     <span class="ab-icon" id="tIcon">📤</span> Submit
   </button>
 
@@ -893,8 +891,8 @@ function addRow(d){
   tr.innerHTML=`
     <td class="chk-cell"><input type="checkbox" onchange="onHL(this)" ${d.hl?'checked':''}></td>
     <td class="sl-cell">–</td>
-    <td><input type="text" placeholder="Name..." value="${x(d.concern||'')}" oninput="recalc()"></td>
-    <td><textarea rows="1" placeholder="Write discussion point..." oninput="autoResize(this);recalc()">${x(d.discussion||'')}</textarea></td>
+    <td><input type="text" value="${x(d.concern||'')}" readonly tabindex="-1"></td>
+    <td><textarea rows="1" readonly tabindex="-1">${x(d.discussion||'')}</textarea></td>
     <td class="att-cell"><input type="checkbox" ${d.attended?'checked':''}></td>
     <td><input type="text" placeholder="Responsible person..." value="${x(d.responsible||'')}"></td>
     <td><select class="ssel" onchange="recalc()">${opts}</select></td>
@@ -1318,8 +1316,8 @@ function saveEditNote(localIdx){
   const tr=document.querySelector(`#tbody tr[data-note-uid="${uid}"]`);
   if(tr){
     const cells=tr.querySelectorAll('td');
-    const cp=cells[2]?.querySelector('textarea');if(cp)cp.value=c;
-    const dp=cells[3]?.querySelector('textarea');if(dp)dp.value=d;
+    const cp=cells[2]?.querySelector('input[type="text"]');if(cp)cp.value=c;
+    const dp=cells[3]?.querySelector('textarea');if(dp){dp.value=d;autoResize(dp);}
   }
   editingNoteIdx=-1;
   renderPlanQueue();
@@ -1330,9 +1328,16 @@ function saveEditNote(localIdx){
     body:JSON.stringify({action:'editNote',uid,concern:c,discussion:d})
   }).catch(()=>{});
 }
+function warnUnsavedEdit(){
+  if(editingNoteIdx===-1 && editingQueueIdx===-1) return true;
+  alert('⚠️ You have an unsaved edit.\n\nPlease click ✓ to save your changes first, then click Save Notes.');
+  return false;
+}
 function closePlanPanel(){
-  document.getElementById('planOverlay').classList.remove('open');
+  if(!warnUnsavedEdit()) return;
+  editingNoteIdx=-1;
   editingQueueIdx=-1;
+  document.getElementById('planOverlay').classList.remove('open');
 }
 function genUid(){return 'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 function addToPlanQueue(){
@@ -1570,42 +1575,52 @@ function clearField(fieldId,btnId){
   el.focus();
 }
 function savePlanToSheet(){
-  // Inline warn if user typed something but didn't click + Add
+  // 1. Check unsaved input text first (inline banner, no dialog)
   const unsaved=document.getElementById('planConcern').value.trim()||document.getElementById('planDiscussion').value.trim();
   if(unsaved){
     document.getElementById('planWarn').classList.add('show');
     document.getElementById('planWarn').scrollIntoView({behavior:'smooth',block:'nearest'});
     return;
   }
+  // 2. Check unsaved edit row (one confirm dialog only)
+  if(!warnUnsavedEdit()) return;
+  // User confirmed — clear editing state so closePlanPanel doesn't double-warn
+  editingNoteIdx=-1; editingQueueIdx=-1;
   hidePlanWarn();
-  if(!planQueue.length){
-    // No new items but deletions may have happened — just close cleanly
-    closePlanPanel();
-    showToast('Done. No new points added.');
-    return;
+  const snapshot=[...planQueue];
+
+  // 1. Add any new planQueue rows to the meeting table
+  if(snapshot.length){
+    snapshot.forEach(item=>addRow({concern:item.concern,discussion:item.discussion,noteUid:item.uid}));
+    // Collect SL numbers recalc() just assigned
+    const rowsWithSl=snapshot.map(item=>{
+      const slCell=document.querySelector(`#tbody tr[data-note-uid="${item.uid}"] .sl-cell`);
+      return Object.assign({},item,{sl:slCell?slCell.textContent.trim():''});
+    });
+    // Save new notes to sheet
+    fetch(SCRIPT_URL,{
+      method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'addNotes',rows:rowsWithSl})
+    }).catch(()=>{});
   }
 
-  // 1. Immediately add rows to the meeting table (with UID so Submit can find them later)
-  const snapshot=[...planQueue];
-  snapshot.forEach(item=>addRow({concern:item.concern, discussion:item.discussion, noteUid:item.uid}));
+  // 2. Always sync the full SL order so drag-and-drop reordering is saved in the sheet
+  const allSlUpdates=[...document.querySelectorAll('#tbody tr[data-note-uid]')]
+    .map(tr=>({uid:tr.dataset.noteUid,sl:tr.querySelector('.sl-cell')?.textContent.trim()||''}))
+    .filter(r=>r.uid&&r.sl&&r.sl!=='–');
+  if(allSlUpdates.length){
+    fetch(SCRIPT_URL,{
+      method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'updateSlOrder',rows:allSlUpdates})
+    }).catch(()=>{});
+  }
 
-  // 1b. Collect the SL numbers recalc() just assigned, keyed by UID
-  const rowsWithSl=snapshot.map(item=>{
-    const slCell=document.querySelector(`#tbody tr[data-note-uid="${item.uid}"] .sl-cell`);
-    return Object.assign({},item,{sl:slCell?slCell.textContent.trim():''});
-  });
-
-  // 2. Clear queue and close panel instantly
+  // 3. Close panel
   planQueue=[]; cacheQueue(); renderPlanQueue();
   closePlanPanel();
-  showToast(`✓ ${snapshot.length} point(s) added to meeting!`);
-
-  // 3. Save to Notes sheet in background (fire-and-forget, supports multiple users)
-  fetch(SCRIPT_URL,{
-    method:'POST', mode:'no-cors',
-    headers:{'Content-Type':'text/plain'},
-    body:JSON.stringify({action:'addNotes', rows:rowsWithSl})
-  }).catch(()=>{}); // silent fail — data already in the panel
+  showToast(snapshot.length?`✓ ${snapshot.length} point(s) added to meeting!`:'✓ Serial order saved.');
 }
 
 // ── REFRESH FROM SHEET ──
@@ -1633,6 +1648,22 @@ async function refreshNotes(btn){
 }
 
 // ── TRANSFER (Notes → Submitted + History) ──
+function confirmSubmit(){
+  const validRows=[...document.querySelectorAll('#tbody tr')].filter(tr=>{
+    if(tr.querySelector('.sl-cell')?.textContent==='–') return false;
+    const c=tr.querySelectorAll('td');
+    const concern=c[2]?.querySelector('input')?.value.trim()||'';
+    const discussion=c[3]?.querySelector('textarea')?.value.trim()||'';
+    return concern||discussion;
+  });
+  if(!validRows.length){
+    alert('⚠️ Nothing to submit.\n\nThere are no meeting points in the table.\nPlease add points using the "Add Meeting Point" panel first.');
+    return;
+  }
+  if(confirm(`Submit ${validRows.length} meeting point(s)?\n\nThis will move all rows to the submitted sheet and cannot be undone.`)){
+    transferData();
+  }
+}
 async function transferData(){
   const rows=document.querySelectorAll('#tbody tr'), payload=[];
   const today=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
