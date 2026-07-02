@@ -176,12 +176,20 @@ tbody td{
 }
 tbody tr:last-child td{border-bottom:none;}
 tbody tr:hover td{background:#FAFAFA;}
-/* Highlighted row */
+/* Highlighted row (checkbox — discussed) */
 tbody tr.hl td{background:#F0FDF4!important;}
 tbody tr.hl .sl-cell{color:var(--emerald)!important;}
 tbody tr.hl td input[type="text"],
 tbody tr.hl td textarea{color:var(--emerald)!important;font-weight:600;}
 tbody tr.hl td select{color:var(--emerald)!important;}
+/* Speaking row (click — currently active in meeting) */
+tbody tr.speaking td{
+  border-top:2.5px solid var(--indigo)!important;
+  border-bottom:2.5px solid var(--indigo)!important;
+}
+tbody tr.speaking td:first-child{border-left:4px solid var(--indigo)!important;}
+tbody tr.speaking td:last-child{border-right:2.5px solid var(--indigo)!important;}
+tbody tr{cursor:pointer;}
 .sl-cell{text-align:center;font-weight:800;color:var(--indigo);font-size:19px;}
 .chk-cell,.att-cell{text-align:center;}
 input[type="checkbox"]{width:15px;height:15px;cursor:pointer;accent-color:var(--indigo);}
@@ -575,17 +583,14 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
     <div class="stat-card">
       <div class="card-label">Total Points</div>
       <div class="card-value" id="totalPts">0</div>
-      <div class="card-sub">Discussion items today</div>
     </div>
     <div class="stat-card" style="border-left-color:#10b981;">
       <div class="card-label">Discussed</div>
       <div class="card-value" id="discussedPts" style="color:#10b981;">0</div>
-      <div class="card-sub">Points done</div>
     </div>
     <div class="stat-card" style="border-left-color:#f59e0b;">
       <div class="card-label">Remaining</div>
       <div class="card-value" id="remainingPts" style="color:#f59e0b;">0</div>
-      <div class="card-sub">Still to discuss</div>
     </div>
   </div>
 
@@ -899,6 +904,20 @@ function addRow(d){
     <td><textarea rows="1" placeholder="Action plan..." oninput="autoResize(this)">${x(d.actionPlan||'')}</textarea></td>
   `;
   if(d.hl) tr.classList.add('hl');
+
+  // Click anywhere on row → mark as "currently speaking" (only one at a time)
+  tr.addEventListener('click',function(e){
+    const tag=e.target.tagName.toLowerCase();
+    // Skip checkboxes, selects, and writable inputs/textareas
+    if(tag==='select') return;
+    if(tag==='input' && e.target.type==='checkbox') return;
+    if(tag==='input' && !e.target.readOnly) return;
+    if(tag==='textarea' && !e.target.readOnly) return;
+    const wasSpeaking=tr.classList.contains('speaking');
+    document.querySelectorAll('#tbody tr.speaking').forEach(r=>r.classList.remove('speaking'));
+    if(!wasSpeaking) tr.classList.add('speaking');
+  });
+
   document.getElementById('tbody').appendChild(tr);
   tr.querySelectorAll('textarea').forEach(t=>autoResize(t));
   recalc();
@@ -1256,6 +1275,13 @@ function initCelebAudio(){
   if(p instanceof Promise) p.then(()=>{_celebAudio.pause();_celebAudio.currentTime=0;}).catch(()=>{});
 }
 document.addEventListener('click',initCelebAudio,{once:true});
+
+// Deselect speaking row when clicking outside the table
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#tbody')) {
+    document.querySelectorAll('#tbody tr.speaking').forEach(r=>r.classList.remove('speaking'));
+  }
+});
 function playCelebrationSound(){
   try{ if(_celebAudio){_celebAudio.currentTime=0;_celebAudio.play();} }catch(e){}
 }
