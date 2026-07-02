@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cascading Meeting Co-Ordinator | SNOWTEX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -40,12 +43,15 @@ body{
 
 /* ══ CARDS ROW ══ */
 .cards-row{
-  display:flex;align-items:stretch;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
   padding:10px 16px 8px;gap:8px;
   position:sticky;top:46px;z-index:99;
   background:linear-gradient(140deg,#EEF2FF 0%,#F5F3FF 40%,#FFF7ED 100%);
   box-shadow:0 4px 16px rgba(79,70,229,.08);
 }
+.stat-group{display:flex;gap:8px;align-items:stretch;}
 .stat-card{
   background:#fff;border-radius:16px;
   box-shadow:0 2px 16px rgba(79,70,229,.13);
@@ -54,18 +60,23 @@ body{
   display:flex;flex-direction:column;justify-content:center;gap:3px;width:140px;
   position:relative;overflow:hidden;
 }
-.card-label{font-size:10px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.9px;}
+.card-label{font-size:12px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.9px;}
 .card-value{font-size:34px;font-weight:900;color:var(--indigo);line-height:1.1;position:relative;}
-.card-sub{font-size:10px;color:#94a3b8;margin-top:2px;}
+.card-sub{font-size:12px;color:#94a3b8;margin-top:2px;}
 
 /* ══ CENTRE TITLE ══ */
-.centre-title{flex:1;text-align:center;padding:0 14px;}
+.centre-title{
+  text-align:center;
+  padding:0 12px;
+}
 .centre-title h1{
-  font-size:21px;font-weight:900;white-space:nowrap;letter-spacing:.4px;
+  font-family:'Montserrat',sans-serif;
+  font-size:30px;font-weight:900;white-space:nowrap;letter-spacing:.6px;
   background:linear-gradient(135deg,var(--indigo),var(--violet),var(--orange));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.1;
 }
-.centre-title p{font-size:10px;color:#94a3b8;margin-top:4px;letter-spacing:.4px;}
+.centre-title p{font-size:12px;color:#94a3b8;margin-top:5px;letter-spacing:.6px;font-weight:600;}
 
 /* ══ TIMER CARD (redesigned) ══ */
 .timer-card{
@@ -95,7 +106,7 @@ body{
   color:#f8fafc;line-height:1;letter-spacing:1px;
 }
 .sq-status{
-  font-size:7px;font-weight:700;color:#94a3b8;
+  font-size:10px;font-weight:700;color:#94a3b8;
   letter-spacing:2px;margin-top:3px;
 }
 .sq-bar-track{
@@ -125,14 +136,14 @@ body{
 .ts-btn:hover{background:rgba(139,92,246,.55);color:#fff;}
 .ts-display{text-align:center;padding:0 5px;}
 .ts-display .ts-num{
-  font-size:16px;font-weight:900;color:#f8fafc;
+  font-size:19px;font-weight:900;color:#f8fafc;
   font-family:'Courier New',monospace;line-height:1;display:block;
 }
-.ts-label{font-size:7px;font-weight:700;color:#64748b;letter-spacing:1.5px;display:block;margin-top:1px;}
+.ts-label{font-size:10px;font-weight:700;color:#64748b;letter-spacing:1.5px;display:block;margin-top:1px;}
 .timer-divider{width:100%;height:1px;background:rgba(255,255,255,.1);}
 .timer-actions{display:flex;flex-direction:row;gap:5px;}
 .ta-btn{
-  border:none;border-radius:6px;width:26px;height:26px;font-size:11px;
+  border:none;border-radius:6px;width:26px;height:26px;font-size:14px;
   cursor:pointer;transition:all .15s;
   display:flex;align-items:center;justify-content:center;font-weight:700;
 }
@@ -147,14 +158,14 @@ body{
   margin:0 16px 10px;background:#fff;border-radius:16px;
   box-shadow:0 2px 16px rgba(79,70,229,.1);overflow:clip;
 }
-table{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed;}
+table{width:100%;border-collapse:collapse;font-size:17px;table-layout:fixed;}
 col.c-chk{width:34px;}col.c-sl{width:36px;}col.c-cp{width:118px;}
 col.c-dp{width:26%;}col.c-att{width:64px;}col.c-rp{width:118px;}
 col.c-st{width:106px;}col.c-ap{width:22%;}
 thead th{
   background:linear-gradient(90deg,var(--indigo-d),var(--indigo));
   color:#fff;font-weight:700;padding:10px 7px;
-  font-size:11px;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;
+  font-size:13px;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;
   text-align:center;
   position:sticky;top:0;z-index:98;
 }
@@ -170,11 +181,11 @@ tbody tr.hl .sl-cell{color:var(--emerald)!important;}
 tbody tr.hl td input[type="text"],
 tbody tr.hl td textarea{color:var(--emerald)!important;font-weight:600;}
 tbody tr.hl td select{color:var(--emerald)!important;}
-.sl-cell{text-align:center;font-weight:700;color:var(--indigo);font-size:14px;}
+.sl-cell{text-align:center;font-weight:700;color:var(--indigo);font-size:16px;}
 .chk-cell,.att-cell{text-align:center;}
 input[type="checkbox"]{width:15px;height:15px;cursor:pointer;accent-color:var(--indigo);}
 td input[type="text"]{
-  width:100%;border:none;background:transparent;font-size:15px;
+  width:100%;border:none;background:transparent;font-size:17px;
   padding:2px 4px;outline:none;color:#1e293b;
 }
 td input[type="text"]:not([readonly]):focus{
@@ -183,7 +194,7 @@ td input[type="text"]:not([readonly]):focus{
 td input[type="text"]::placeholder{color:#CBD5E1;}
 td input[type="text"][readonly]{cursor:default;}
 td textarea{
-  width:100%;border:none;background:transparent;font-size:15px;
+  width:100%;border:none;background:transparent;font-size:17px;
   padding:2px 4px;outline:none;color:#1e293b;
   resize:none;overflow:hidden;min-height:24px;line-height:1.45;font-family:inherit;
 }
@@ -194,7 +205,7 @@ td textarea::placeholder{color:#CBD5E1;}
 td textarea[readonly]{cursor:default;}
 select.ssel{
   width:100%;border:1px solid #E2E8F0;background:#fff;padding:4px;
-  font-size:12.5px;cursor:pointer;border-radius:6px;color:#444;
+  font-size:15px;cursor:pointer;border-radius:6px;color:#444;
 }
 select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 
@@ -211,7 +222,7 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .ab-btn{
   display:flex;align-items:center;gap:7px;
   border:none;border-radius:10px;cursor:pointer;
-  font-weight:700;font-size:13px;padding:10px 18px;
+  font-weight:700;font-size:15px;padding:10px 18px;
   transition:transform .12s,box-shadow .15s;
   box-shadow:0 2px 8px rgba(0,0,0,.14);letter-spacing:.3px;
   white-space:nowrap;
@@ -269,12 +280,12 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 }
 .plan-field{flex:1;}
 .plan-field label{
-  font-size:10px;font-weight:700;color:var(--slate);
+  font-size:12px;font-weight:700;color:var(--slate);
   text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:5px;
 }
 .plan-field input,.plan-field textarea{
   width:100%;height:44px;border:2px solid #E2E8F0;border-radius:8px;
-  padding:9px 12px;font-size:14px;color:#1e293b;font-family:inherit;
+  padding:9px 12px;font-size:16px;color:#1e293b;font-family:inherit;
   outline:none;transition:border-color .15s;background:#fff;
   display:block;
 }
@@ -282,7 +293,7 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .plan-field textarea{resize:none;height:44px;line-height:1.4;}
 .plan-add-btn{
   background:var(--orange);color:#fff;border:none;border-radius:8px;
-  padding:0 22px;font-size:15px;font-weight:700;cursor:pointer;
+  padding:0 22px;font-size:17px;font-weight:700;cursor:pointer;
   white-space:nowrap;transition:all .15s;align-self:flex-end;height:44px;
 }
 .plan-add-btn:hover{background:#EA580C;transform:translateY(-1px);}
@@ -301,17 +312,17 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .plan-warn{
   display:none;align-items:center;gap:8px;
   background:#FEF3C7;border:1.5px solid #FCD34D;border-radius:8px;
-  padding:9px 14px;font-size:13px;font-weight:600;color:#92400E;
+  padding:9px 14px;font-size:15px;font-weight:600;color:#92400E;
   margin-bottom:10px;
 }
 .plan-warn.show{display:flex;}
 .plan-warn-icon{font-size:16px;}
 .plan-list-wrap{flex:1;overflow-y:auto;margin-bottom:14px;min-height:0;}
 .plan-list-label{
-  font-size:10px;font-weight:700;color:var(--slate);
+  font-size:12px;font-weight:700;color:var(--slate);
   text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;
 }
-.plan-empty{text-align:center;color:#CBD5E1;font-size:13px;padding:20px 0;}
+.plan-empty{text-align:center;color:#CBD5E1;font-size:15px;padding:20px 0;}
 .plan-item{position:relative;}
 .plan-item.drop-before::before{
   content:'';position:absolute;top:-4px;left:0;right:0;
@@ -337,26 +348,26 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .plan-item input,.plan-item textarea,.plan-item select{cursor:auto;user-select:text;-webkit-user-select:text;}
 .plan-sl{
   background:linear-gradient(135deg,var(--orange),#EA580C);color:#fff;
-  width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;
+  width:22px;height:22px;border-radius:50%;font-size:13px;font-weight:800;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
 }
 .plan-info{flex:1;min-width:0;}
-.plan-info strong{display:block;font-size:13px;color:#1e293b;margin-bottom:2px;font-weight:700;}
-.plan-info span{font-size:12px;color:var(--slate);line-height:1.4;}
+.plan-info strong{display:block;font-size:15px;color:#1e293b;margin-bottom:2px;font-weight:700;}
+.plan-info span{font-size:14px;color:var(--slate);line-height:1.4;}
 .plan-del{
   background:none;border:none;cursor:pointer;color:#CBD5E1;
   font-size:16px;padding:2px 5px;border-radius:4px;transition:all .12s;flex-shrink:0;
 }
 .plan-del:hover{color:var(--red);background:#FEF2F2;}
 .plan-section-label{
-  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:#94A3B8;padding:6px 4px 4px;border-bottom:1px solid #F1F5F9;margin-bottom:4px;
 }
 .plan-item-saved{background:#F0F9FF;border-left:3px solid #38BDF8;}
 .plan-item-saved .plan-info strong{color:#0369A1;}
 .plan-item-btns{display:flex;gap:4px;flex-shrink:0;}
 .plan-edit-btn{
-  background:none;border:none;cursor:pointer;font-size:13px;
+  background:none;border:none;cursor:pointer;font-size:15px;
   padding:2px 5px;border-radius:4px;transition:all .12s;color:#64748B;
 }
 .plan-edit-btn:hover{background:#E0F2FE;color:#0369A1;}
@@ -364,7 +375,7 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .plan-edit-fields{flex:1;display:flex;flex-direction:column;gap:5px;}
 .plan-edit-input,.plan-edit-textarea{
   width:100%;border:1.5px solid #FCD34D;border-radius:6px;
-  padding:5px 8px;font-size:13px;font-family:inherit;background:#fff;
+  padding:5px 8px;font-size:15px;font-family:inherit;background:#fff;
   box-sizing:border-box;
 }
 .plan-edit-input:focus,.plan-edit-textarea:focus{outline:none;border-color:#F59E0B;}
@@ -372,29 +383,29 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 .plan-edit-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0;}
 .plan-edit-save{
   background:#10B981;color:#fff;border:none;border-radius:6px;
-  padding:4px 8px;font-size:14px;font-weight:700;cursor:pointer;
+  padding:4px 8px;font-size:15px;font-weight:700;cursor:pointer;
 }
 .plan-edit-save:hover{background:#059669;}
 .plan-edit-cancel{
   background:#F1F5F9;color:#64748B;border:none;border-radius:6px;
-  padding:4px 8px;font-size:14px;cursor:pointer;
+  padding:4px 8px;font-size:15px;cursor:pointer;
 }
 .plan-edit-cancel:hover{background:#FEE2E2;color:#EF4444;}
 .plan-loading-notes{
-  font-size:12px;color:#94A3B8;text-align:center;padding:10px 0;font-style:italic;
+  font-size:14px;color:#94A3B8;text-align:center;padding:10px 0;font-style:italic;
 }
 .plan-footer{display:flex;gap:10px;padding:14px 28px 18px;border-top:1px solid #F1F5F9;flex-shrink:0;background:#fff;}
 .plan-save-btn{
   background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;
   border:none;border-radius:10px;padding:11px 24px;
-  font-size:14px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;
+  font-size:16px;font-weight:700;cursor:pointer;flex:1;transition:all .15s;
 }
 .plan-save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,70,229,.3);}
 .plan-save-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .plan-cancel-btn{
   background:#F1F5F9;color:var(--slate);
   border:none;border-radius:10px;padding:11px 20px;
-  font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;
+  font-size:16px;font-weight:600;cursor:pointer;transition:all .15s;
 }
 .plan-cancel-btn:hover{background:#E2E8F0;}
 
@@ -559,20 +570,22 @@ select.ssel:focus{outline:1px solid var(--indigo);border-color:var(--indigo);}
 <div class="cards-row">
 
   <!-- Left: Stat Cards -->
-  <div class="stat-card">
-    <div class="card-label">Total Points</div>
-    <div class="card-value" id="totalPts">0</div>
-    <div class="card-sub">Discussion items today</div>
-  </div>
-  <div class="stat-card" style="border-left-color:#10b981;">
-    <div class="card-label">Discussed</div>
-    <div class="card-value" id="discussedPts" style="color:#10b981;">0</div>
-    <div class="card-sub">Points done</div>
-  </div>
-  <div class="stat-card" style="border-left-color:#f59e0b;">
-    <div class="card-label">Remaining</div>
-    <div class="card-value" id="remainingPts" style="color:#f59e0b;">0</div>
-    <div class="card-sub">Still to discuss</div>
+  <div class="stat-group">
+    <div class="stat-card">
+      <div class="card-label">Total Points</div>
+      <div class="card-value" id="totalPts">0</div>
+      <div class="card-sub">Discussion items today</div>
+    </div>
+    <div class="stat-card" style="border-left-color:#10b981;">
+      <div class="card-label">Discussed</div>
+      <div class="card-value" id="discussedPts" style="color:#10b981;">0</div>
+      <div class="card-sub">Points done</div>
+    </div>
+    <div class="stat-card" style="border-left-color:#f59e0b;">
+      <div class="card-label">Remaining</div>
+      <div class="card-value" id="remainingPts" style="color:#f59e0b;">0</div>
+      <div class="card-sub">Still to discuss</div>
+    </div>
   </div>
 
   <!-- Centre: Title -->
